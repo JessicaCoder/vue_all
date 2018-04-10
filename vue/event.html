@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- <script src="../node_modules/vue/dist/vue.js"></script> -->
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script>
+		window.onload=function(){
+			new Vue({
+				el:'#my',    // 2.0不允许挂载到html,body元素上
+				data:{
+					msg:'Hello World',
+					html:'<span>123</span>'
+					
+				},
+				methods:{
+					show1() {
+						console.log("111");
+					},
+					show2:function() {
+						console.log("222");
+					},
+					show3(e) {
+						console.log("333");
+						//console.log(e);
+						//e.stopPropagation();  //阻止事件冒泡
+					},
+					open(e) {
+						console.log('open');
+						//e.preventDefault();   //取消事件的默认的动作
+						//e.stopPropagation();  //阻止事件冒泡
+
+					},
+					once(e) {
+						console.log('once');
+					}
+				}
+			});
+		}
+	</script>
+
+</head>
+<body>
+	<div id="my" @click="show1()">A1
+		<div @click="show2()">A2
+			<button @click.stop="show3($event)">A3</button>
+		</div>
+		<!-- 只执行一次 -->
+		<div @click.once="once($event)">once</div>
+
+		<a href="www.baidu.com" @click="open($event)">1111</a>
+		<a href="www.baidu.com" @click.prevent.stop="open()">1111</a>
+		
+	</div>
+	
+</body>
+</html>

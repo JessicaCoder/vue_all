@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- <script src="../node_modules/vue/dist/vue.js"></script> -->
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script>
+		window.onload=function(){
+			Vue.filter('addZero',function(data) {
+				return data<10 ? '0'+data : data;
+			});
+			new Vue({
+				el:'#my',    // 2.0不允许挂载到html,body元素上
+				data:{
+					msg:'Hello World',
+					flag:true,
+					lists:[{name:'a1',type:'1'},{name:'a2',type:'2'},{name:'a3',type:'3'}],
+					currentTime:Date.now()
+					
+				},
+				methods:{
+					click1() {
+						this.flag= !this.flag;
+					},
+					
+				},
+				filters:{
+					number:function(data,n) {
+						return data.toFixed(n);
+					},
+					text:function(data) {
+						if(data){
+							return "显示"
+						}else {
+							return "隐藏"
+						}
+					},
+					numFilter:function(data) {
+						switch(data){
+							case "1":
+								return "启动";
+								//break;
+							case "2":
+								return "离线";
+								//break;
+							case "3":
+								return "连接";
+								//break;
+							default:
+								return data;
+						}
+					},
+					date:(data,n) =>{
+						let d = new Date(data);
+						return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+					}
+
+				}
+			});
+		}
+	</script>
+
+</head>
+<body>
+	<div id="my">
+		<!-- 过滤器用法  | 过滤器名称    -->
+		<div>{{3.14159 | number(2)}}</div>
+		<div>{{1 | addZero}}</div>
+		<button @click="click1">{{flag | text}}</button>
+		<ul v-if="!flag">
+			<li v-for="list in lists">{{list.type | numFilter}}</li>
+		</ul>
+
+		<p>{{currentTime | date }}</p>
+		
+	</div>
+	
+</body>
+</html>

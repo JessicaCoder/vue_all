@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>$set $delete</title>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					name:'moris',
+					age:22,
+					user:{
+						id:100,
+						name:'sonia',
+						msg:'12345'
+
+					},
+				},
+				methods:{
+					update(){
+						this.user.age="xxxx"
+					},
+					add() {
+						//对象属性内部添加/删除
+						//this.user.age = 22;//无效
+						this.$set(this.user,'age',22);
+					},
+					del() {
+						//this.user.age = 22;//无效
+						this.$delete(this.user,'age');
+					}
+				},
+				
+			});
+
+		}
+	</script>
+</head>
+<body>
+	<div id="my">
+		<h2>{{user.name}}</h2>
+		<h2>{{user.age}}</h2>
+		<button @click="add">add</button>
+		<button @click="update">update</button>
+		<button @click="del">del</button>
+	</div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>$watch</title>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		//组件创建方式1
+		var myComponent = Vue.extend({
+			template:'<h2>hello</h2>'
+		})
+		Vue.component('hello',myComponent);
+		//组件创建方式2
+		Vue.component('my-world',{
+			template:'<h2>world</h2>'
+		});
+
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					name:'moris',
+					age:22,
+					user:{
+						id:100,
+						name:''
+					},
+					flag:'my-address',
+					flag1:'my-hello1'
+				},
+				methods:{
+					changeUser(){
+						this.user.name="xxxx"
+					}
+				},
+				components: {   //局部组件
+					'my-address':{
+						template:'#myaddress',
+						data(){
+							return {
+								address:"wulan123",
+								arr:['a','b']
+							}
+						},
+						directives:{// 自定义局部指令
+							focus:{
+								inserted(el){     //当被绑定的元素插入到 DOM 中时
+									el.focus();
+								}
+							}
+						}
+					},
+					'my-row':{
+						template:'#myrow',
+						data(){
+							return {
+								address:"wulan123",
+								arr:['a','b']
+							}
+						},
+					},
+					'my-slot':{
+						template:'#myslot',
+						data(){
+							return {
+								address:"wulan123",
+								arr:['a','b']
+							}
+						},
+					},
+					'my-hello1':{
+						template:'<h3>aaa:{{x}}</h3>',
+						data(){
+							return {
+								x:Math.random()
+							}
+						},
+					},
+					'my-hello2':{
+						template:'<h3>bbbb:{{y}}</h3>',
+						data(){
+							return {
+								y:Math.random()
+							}
+						},
+					}
+
+				}
+			});
+
+		}
+	</script>
+</head>
+<template id="myaddress">
+	<div>
+		<h2>{{address}}</h2>
+		<ul>
+			<li v-for="item in arr">{{item}}</li>
+		</ul>
+		<input type="text" v-focus>
+	</div>
+	
+</template>
+<template id="myrow">
+	<tbody>
+		<tr>
+			<td>123432</td>
+		</tr>
+	</tbody>
+</template>
+<template id="myslot">
+	<div>
+		<h3>组件</h3>
+		<slot name="s1"></slot>
+		<slot name="s2"></slot>
+	</div>
+</template>
+<body>
+	<div id="my">
+		<!-- <hello></hello>
+		<my-world></my-world>
+		<my-address></my-address>
+		<my-address></my-address> -->
+		<table>
+			<!-- <my-row></my-row> -->
+			<tbody is="my-row"></tbody>
+		</table>
+
+		<!-- slot 内容分发 -->
+		<!-- <my-slot>
+			<ul slot="s1">
+				<li>1</li>
+				<li>1</li>
+				<li>1</li>
+			</ul>
+			<ul slot="s2">
+				<li>2</li>
+				<li>2</li>
+				<li>2</li>
+			</ul>
+		</my-slot> -->
+
+		<!-- 动态模板 -->
+		<button @click="flag='my-address'">address</button>
+		<button @click="flag='my-slot'">slot</button>
+		<!-- <my-address v-if="flag=='my-address'"></my-address>
+		<my-slot v-if="flag=='my-slot'">
+			<ul slot="s1">
+				<li>1</li>
+				<li>1</li>
+				<li>1</li>
+			</ul>
+			<ul slot="s2">
+				<li>2</li>
+				<li>2</li>
+				<li>2</li>
+			</ul>
+		</my-slot> -->
+		<!-- 动态组件 -->
+		<!-- <component :is="flag"></component> -->
+		<!-- keep-alive 缓存非活动组件-->
+		<button @click="flag1='my-hello1'">hello1</button>
+		<button @click="flag1='my-hello2'">hello2</button>
+		<keep-alive>
+			<component :is="flag1"></component>
+		</keep-alive>
+		
+	</div>
+</body>
+</html>

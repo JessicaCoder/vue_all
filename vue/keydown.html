@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- <script src="../node_modules/vue/dist/vue.js"></script> -->
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script>
+		window.onload=function(){
+			new Vue({
+				el:'#my',    // 2.0不允许挂载到html,body元素上
+				data:{
+					msg:'Hello World',
+					html:'<span>123</span>'
+					
+				},
+				methods:{
+					key1() {
+						console.log("111");
+					},
+					keyEnter:function() {
+						console.log("enter");
+					},
+					show3(e) {
+						console.log("333");
+						
+					},
+				}
+			});
+		}
+	</script>
+
+</head>
+<body>
+	<div id="my">
+		<input @keydown="key1()"/>111
+		<input @keydown.enter="keyEnter()"/>111
+		<input @keydown.a="keyEnter()"/>111
+		<input @keydown.up="keyEnter()"/>111
+		<input @keyup.space="keyEnter()"/>111
+		<input @keypress="keyEnter()"/>111
+		
+	</div>
+	
+</body>
+</html>

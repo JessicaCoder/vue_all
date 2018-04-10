@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>$watch</title>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					name:'moris',
+					age:22,
+					user:{
+						id:100,
+						name:''
+					},
+					ageChange:'',
+					nameChange:''
+				},
+				methods:{
+					changeUser(){
+						this.user.name="xxxx"
+					}
+				},
+				watch:{
+					age:function(newValue, oldValue){
+						console.log('ageChange'+'age被修改了', newValue, oldValue);
+						this.ageChange = '我的年龄'+newValue +'我的姓名'+ this.name;
+					},
+					name:function(val) {
+						this.nameChange ='nameChange'+ '我的姓名'+val +'我的年龄'+ this.age;
+					},
+					user:{
+						handler:(newValue, oldValue) => {     //handler默认执行函数 也可以去掉
+							console.log('user被修改了', newValue, oldValue);
+						},
+						deep:true //表示监视对象的属性变化,false则handler函数不执行,但此时看不到newValue与oldValue区别
+						//为了发现对象内部值的变化，可以在选项参数中指定 deep: true 。注意监听数组的变动不需要这么做。
+					}
+				},
+				computed: {
+		            info: function () {
+		                return 'computed'+'我的年龄'+this.age + '我的姓名' + this.name
+		            }
+		        }
+			});
+
+			//方式2
+			vm.$watch('name', function(newValue, oldValue){
+				console.log('name被修改了', newValue, oldValue);
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="my">
+		<input type="text" v-model="name">
+		<h3>{{name}}</h3>
+		<input type="text" v-model="age">
+		<h3>{{age}}</h3>
+		<!-- age变化触发ageChange -->
+		<h3>{{ageChange}}</h3>
+		<input type="text" v-model="user.name">
+		<h3>{{user.name}}</h3>
+		<!-- name变化触发nameChange -->
+		<h3>{{nameChange}}</h3>
+		<!-- 与计算属性的区别 当监听到值发生变化时是过程式开发，比较笨重-->
+		<h3>{{info}}</h3>
+	</div>
+</body>
+</html>

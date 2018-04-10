@@ -1,0 +1,6 @@
+#vue-all
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+*.docx

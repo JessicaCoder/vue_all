@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>指令生命周期(钩子函数)</title>
+	<!-- <script src="node_modules/vue/dist/vue.js"></script> -->
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script>
+		// 自定义指定可操作DOM 注：必须加前缀，v-
+		Vue.directive('hello', {
+			// 可以有参数el binding, binding中包括一些属性：name,value,
+			// binding.vlaue => 绑定的变量
+			// binding.expression => 表达式  v-my-directive="1+1"
+			// binding.arg => 传参 v-on:click 
+			// binding.modifiers => 如: v-on:click.prevent 修饰符可以有多个
+			bind(el, binding){//常用
+				console.log(el, binding.arg);
+				el.style.color = 'red';
+				alert("指令第一次绑定到元素上时调用，只调用一次，可执行初始化操作");
+			},
+			inserted(){
+				alert("被绑定元素插入到dom中时调用");
+			},
+			update(){
+				alert("被绑定元素所在模板更新时调用");
+			},
+			componentUpdated(){
+				alert("被绑定元素所在模板完成一次更新周期时调用")
+			},
+			unbind(){
+				alert("指令与元素解绑时调用，只调用一次");
+			}
+		})
+
+		//传入一个简单的函数，bind和update时调用
+		Vue.directive('hello2', function(el){
+			el.style.color = 'blue';
+		})
+
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					name:'moris',
+					age:22,
+					user:{
+						id:100
+					}
+				},
+				methods:{
+					/*change(){
+						this.name="tom"
+					}*/
+				},
+				directives:{// 自定义局部指令
+					focus:{
+						inserted(el){     //当被绑定的元素插入到 DOM 中时
+							el.focus();
+						}
+					}
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="my">
+		<h3 v-hello>{{name}}</h3>
+		<h3 v-hello:wbs>{{name}}</h3>
+		<!-- <h3 v-hello:wbs.hehe.haha="age">{{name}}</h3> -->
+
+		<h3 v-hello2>{{name}}</h3>
+		<h3 v-hello2>{{age}}</h3>
+		<h3 v-hello2>{{user.id}}</h3>
+
+		<input type="text" v-focus>
+		<br>
+		<!-- <button @click="change">update</button> -->
+	</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>过渡动画</title>
+	<style>
+		p{
+			width: 200px;
+			height: 200px; 
+			background-color: red;
+		}
+		/*开始过渡阶段，动画离开阶段*/
+		.fade-enter-active, .fade-leave-active{
+			transition: all 3s ease;
+		}
+		/*开始*/
+		.fade-enter-active{
+			opacity: 1;
+			width: 200px;
+			height: 200px;
+		}
+		/*离开*/
+		.fade-leave-active{
+			opacity: 0;
+			width: 100px;
+			height: 100px;
+		}
+		/*开始*/
+		.fade-enter{ 
+			opacity: 0;
+			width: 10px;
+			height: 10px;
+		}
+	</style>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					flag: false
+				},
+				methods:{
+					beforeEnter(el){
+						// alert('动画进入之前');
+						el.style.background='red';
+					},
+					enter(){
+						// alert('动画进入');
+					},
+					afterEnter(el){
+						// alert("进入动画之后")
+						el.style.background='blue';
+					},
+					beforeLeave(el){
+						el.innerHTML="123";
+						// alert("动画离开之前")
+					},
+					leave(){
+
+						// alert("动画离开")
+					},
+					afterLeave(){
+						// alert("动画离开之后")
+					}
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="my">
+		<button @click="flag = !flag">click me</button>
+
+		<transition name="fade"
+			@before-enter="beforeEnter"
+			@enter="enter"
+			@after-enter="afterEnter"
+			@before-leave="beforeLeave"
+			@leave="leave"
+			@after-leave="afterLeave"
+			>
+			<p v-show="flag">Welcome</p>
+		</transition>
+	</div>
+</body>
+</html>

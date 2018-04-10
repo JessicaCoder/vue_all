@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>非父子组件间的通信</title>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		// 定义一个空对象，用于触发和监听实例
+		var Bus = new Vue();
+		var A = {
+			template: '#a',
+			data(){
+				return {
+					name:'aaa'
+				}
+			},
+			methods:{
+				send(){
+					Bus.$emit('data-a', this.name);
+				}
+			}
+		}
+		var B = {
+			template: '#b',
+			data(){
+				return {
+					age:33
+				}
+			},
+			methods:{
+				send(){
+					Bus.$emit('data-b', this.age);
+				}
+			}
+			// mounted(){
+			// 	Bus.$emit('data-b', this.age)
+			// }
+		}
+		var C = {
+			template: '#c',
+			data(){
+				return {
+					name:'',
+					age:''
+				}
+			},
+			mounted(){
+				//这种写法取不到值
+				 Bus.$on('data-a', function(name){
+				 	this.name = name;
+				 });
+				 //箭头函数this总是指向函数定义生效时所在的对象
+				// 注意：箭头函数内部不会产生新的this，即就是当前实例，回调会
+				// 回调函数内部this为上面的空vue实例对象
+				/*Bus.$on('data-a', name =>{
+					this.name = name;
+				});*/
+				Bus.$on('data-b', age =>{    //$on接收
+					this.age = age;
+				});
+			}
+		}
+
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',
+				data:{
+				},
+				components: { //局部组件
+					'my-a': A,
+					'my-b': B,
+					'my-c': C
+				}
+			});
+		}
+	</script>
+</head>
+<template id="a">
+	<div>
+		<h3>组件a：{{name}}</h3>
+		<button @click="send">数据发给C</button>
+	</div>
+</template>
+<template id="b">
+	<div>
+		<h3>组件b：{{age}}</h3>
+		<button @click="send">数据发给C</button>
+	</div>
+</template>
+<template id="c">
+	<div>
+		<h3>组件c：{{name}} {{age}}</h3>
+	</div>
+</template>
+<body>
+	<div id="my">
+		<my-a></my-a>
+		<my-b></my-b>
+		<my-c></my-c>
+	</div>
+</body>
+</html>

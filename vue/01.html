@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- <script src="../node_modules/vue/dist/vue.js"></script> -->
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script>
+		window.onload=function(){
+			new Vue({
+				el:'#my',    // 2.0不允许挂载到html,body元素上
+				data:{
+					msg:'Hello World',
+					name:'sonia',
+					aa:'',
+					age:22,
+					flag:true,
+					arr:['a','b','c','d'],
+					obj:{id:1,name:'aaa'},
+					obj2:[{name:'a1',age:10},{name:'a2',age:20},{name:'a3',age:30}]
+				},
+				methods:{
+					action:function() {
+						//console.log("click");
+						this.msg = 'click'
+					},
+					action2:function() {
+						//console.log("click");
+						this.age = 20
+					},
+					action3:function() {
+						//console.log("click");
+						this.age = 22
+					}
+				}
+			});
+		}
+		/*$.each(arr,function(index,item){
+
+		})*/
+	</script>
+</head>
+<body>
+	<div id="my">
+		<!-- {{msg}},{{arr}},{{obj2}} -->
+		<!-- 双项数据绑定-->
+		<input type="text" v-model="msg"/>
+		{{msg}}
+		<!-- 数组 arr -->
+		<ul>
+			<li v-for="item in arr">{{item}}</li>
+		</ul>
+		<!-- 数组 arr   v  value   i  index -->
+		<ul>
+			<li v-for="(v,i) in arr">{{v}}======{{i}}</li>
+		</ul>
+
+		<!--  对象   v  value   k key -->
+		<!-- <ul>
+			<li v-for="(v,k) in obj">{{v}}======{{k}}</li>
+		</ul> -->
+
+		<!--  数组对象   v  value   i index -->
+		<!-- <ul>
+			<li v-for="(v,i) in obj2">{{v.name}}={{v.age}}======{{i}}</li>
+		</ul>
+		<ul>
+			<li v-for="v in obj2">{{v.name}}</li>
+		</ul> -->
+		<button v-on:click="action">click</button>
+		<button v-on:mouseover="action2" v-on:mouseout="action3">mouseover</button>
+		<button v-on:mouseout="action3">mouseout</button>
+		<button v-on:dblclick="action2">dblclick</button>
+
+		<button @click="action">click</button>
+		{{age}}
+
+		<button v-show="flag">show123</button>
+		<p v-if="type=='a'">a</p>
+		<p v-else-if="type=='b'" >b</p>
+		<p v-else >not</p>
+		<p v-if="flag?aa='a':aa='b'">{{aa}}</p>
+	</div>
+	</div>
+	
+</body>
+</html>

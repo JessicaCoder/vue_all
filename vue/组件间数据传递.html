@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>父子组件及组件间数据传递</title>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					flag:'my-hello'
+				},
+				components: { //局部组件
+					'my-parent': {
+						template:'#parent',
+						data(){
+							return {
+								page:40,
+								pname:'parent',
+								cage:'',
+								cname:''
+							}
+						},
+						methods:{
+							getSubData(name,age) {
+								this.cage = age;
+								this.cname = name;
+							}
+						},
+						components:{
+							'my-child':{//子组件
+								data(){
+									return {
+										cage:'10',
+										cname:'child'
+									}
+								},
+								template:'#child',
+								props:['message','message2'] , //父传到子
+								/*props:{ //也可以是对象，允许配置高级设置，如类型判断、数据校验、设置默认值
+									message:String,   //指定类型
+									message2:String,
+									name:{
+										type:String,
+										required:false
+									},
+									age:{                  //传的参数进行校验
+										type:Number,
+										required:false,   //是否必须
+										default:10,       //默认值
+										validator:function(value){   //是否进行校验
+											return value>=0;
+										}
+									},
+									user:{
+										type:Object,
+										default:function(){
+											return {id:111}
+										}
+									}
+								},*/
+								methods:{
+									send(){
+										console.log(this);// 此时this为子组件实例
+										this.$emit('e-child', this.cname, this.cage); //发送数据  emit发射/发送
+									},
+								},
+								mounted(){//常用  挂载结束状态  完成挂载
+									this.send();
+								},
+							}
+							
+						}
+					}
+				}
+			});
+		}
+	</script>
+</head>
+<template id="parent">
+	<div>
+		<h3>我是父组件，访问自己的数据：姓名-{{pname}},年龄-{{page}}</h3>
+		<h3 >我是父组件，接收子的数据：姓名-{{cname}}, 年龄-{{cage}}</h3>
+		<hr>
+		<!-- 父调用子 父传入子 -->
+		<my-child :message="page" :message2="pname" @e-child="getSubData"></my-child>
+
+		<!-- 子调用父 -->
+		<!-- <my-child @e-child="getSubData"></my-child> -->
+	</div>
+</template>
+<template id="child">
+	<div>
+		<h3>我是子组件，访问父的数据：姓名-{{message2}} ,年龄-{{message}}</h3>
+		<h3>我是子组件，访问自己的数据：年龄-{{cage}}, 姓名-{{cname}}</h3>
+		<button @click="send">将子组件的数据向上传递给父组件</button>
+	</div>
+</template>
+<body>
+	<div id="my">
+		<my-parent></my-parent>
+	</div>
+</body>
+</html>

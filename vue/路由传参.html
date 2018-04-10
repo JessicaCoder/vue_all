@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>路由嵌套和参数传递</title>
+	<meta charset="utf8">
+	<!-- <link rel="stylesheet" href="node_modules/animate.css/animate.css"> -->
+	<style>
+		/*这个命令是默认的，也可以使用别名*/
+		/*.router-link-active{
+			font-size: 20px;
+			color:#ff7300;
+			text-decoration: none;
+		}*/
+
+		.active{
+			font-size: 20px;
+			color:#ff7300;
+			text-decoration: none;
+		}
+	</style>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script src="../lib/vue-router/dist/vue-router.js"></script>
+	<script>
+		// 定义组件
+		var Home={
+			template: '<h3>我是主页</h3>'
+		}
+		var News={
+			template: '#news',
+			data(){
+				return {
+					name:'sonia',
+					id:123
+				}
+			},
+		}
+		var Login={
+			template: '<h3>Login——获取参数:{{$route.query}}</h3>'   //获取参数
+		}
+		var Regist={
+			template: '<h3>Regist——参数:{{$route.params}}, {{$route.path}}</h3>'
+		}
+
+		// 配置路由
+		const routes = [
+			{path: '/home', component: Home},
+			{
+				path: '/news', 
+				component: News,
+				children:[{
+					path:'login',
+					component:Login
+				},{
+					path:'regist/:name/:pwd',
+					component:Regist
+				}]
+		    },
+			{path: '/', redirect: '/home'}   //重定向
+		];
+
+		const router = new VueRouter({
+			routes, // 简写，相当于routes:routes
+			//mode: 'history',
+			linkActiveClass: 'active'  //样式别名
+		})
+
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',
+				router,
+				data:{
+					name:'aaa',
+					id:222
+				},
+				methods:{
+					push(){
+						router.push({path: '/home'})  //添加路由或切换
+					},
+					replace(){
+						router.replace({path: '/news'})  //替换路由，浏览器无历史记录
+					}
+				}
+			});
+		}
+	</script>
+	<template id="news">
+		<div>
+			<h3>用户信息</h3>
+			<ul>
+				<li><router-link to="/news/login?name=tom&pwd=111">用户登录</router-link></li>
+				<!-- 动态传参   :to="'/news/regist/name/'+id" -->
+				<li><router-link :to="'/news/regist/'+name+'/'+id">用户注册</router-link></li>
+			</ul>
+			<router-view></router-view>
+
+		</div>
+	</template>
+</head>
+
+<body>
+	<div id="my">
+		<router-link to="/home">Home</router-link>
+		<router-link to="/news">News</router-link>
+		<div>
+			<router-view></router-view>
+		</div>
+		<button @click="push">添加路由</button>
+		<button @click="replace">替换路由</button>
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>计算属性（引用+缓存）</title>
+	<!-- <script src="../node_modules/vue/dist/vue.js"></script> -->
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script>
+		window.onload=function(){
+			new Vue({
+				el:'#my',    // 2.0不允许挂载到html,body元素上
+				data:{
+					msg:'Hello World',
+					num1:100
+					
+				},
+				methods:{
+					change() {
+						this.num2 = 111;    //setter  num2    get
+					},
+					getNum2(){
+						console.log(this.num2);   //get num2
+					},
+					getChange() {       //方法
+						console.log("methods");
+					}
+					
+				},
+				computed:{    //计算属性  用来存储和处理数据
+					reverseMsg:function() {
+						return this.msg.split('').reverse().join('');
+					},
+					// num2:function() {
+					// 	return this.num1-1;
+					// }
+					num2:{
+						get:function() {
+							console.log("computed");
+							return this.num1-1;
+						},
+						set:function(val) {
+							console.log('set');
+							//this.num2 = val;//错误  不能直接修改计算属性
+							this.num1 = val
+						}
+					}
+				}
+			});
+		}
+	</script>
+
+</head>
+<body>
+	<div id="my">
+		<p>{{msg}}</p>
+		<p>{{reverseMsg}}</p>
+		<p>{{num2}}</p> 
+		<!-- 计算属性值变更 -->
+		<button @click="change">change</button>
+		<!-- 计算属性获取 -->
+		<button @click="getNum2()">get num2</button>
+
+		<!-- 方法 -->
+		<button @click="getChange()">methods</button>
+		<!-- 计算属性 -->
+		<button @click="getNum2()">computed</button>
+	</div>
+	
+</body>
+</html>

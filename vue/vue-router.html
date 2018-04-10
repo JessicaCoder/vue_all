@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue-router</title>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script src="../lib/vue-router/dist/vue-router.js"></script>
+	<style>
+		/*.router-link-active {
+			color: #f60;
+		}*/
+		.active {
+			color: #f60;
+		}
+	</style>
+	<script>
+		// 定义组件
+		var Home = {
+			template: '#home'
+		}
+		var News = {
+			template: '#news'
+		}
+		//配置路由
+		const routes = [
+			{path: '/home', component: Home},
+			{path: '/news', component: News},
+			{path: '/', redirect: '/home'}   //重定向  {path: '/*', redirect: '/home'}   //重定向
+		];
+		const router = new VueRouter({
+			routes,//routes:routes
+			linkActiveClass: 'active' 
+		});
+		
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',
+				router,
+				data:{
+				}
+			});
+		}
+	</script>
+</head>
+<template id="home">
+	<div>
+		<h3>组件home</h3>
+	</div>
+</template>
+<template id="news">
+	<div>
+		<h3>组件news</h3>
+	</div>
+</template>
+
+<body>
+	<div id="my">
+		<router-link to="/home">home</router-link>
+		<router-link to="/news">news</router-link>
+		<div>
+			<router-view></router-view>
+		</div>
+	</div>
+</body>
+</html>

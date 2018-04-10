@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue实例属性和方法</title>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				//el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					name:'moris',
+					age:22,
+					user:{
+						id:100,
+						name:''
+					},
+					ageChange:'',
+					nameChange:''
+				},
+				name:'sonia',
+				show:function() {
+					console.log("show");
+				},
+				methods:{
+					changeUser(){
+						this.user.name="xxxx"
+					},
+					add(){
+						this.$refs.hello.style.color = "orange";
+						this.$refs.inputText.value="aaa";
+					},
+					abc(){
+						//console.log(this.$refs.hello.textContent);
+						this.$nextTick(function() {
+							//获取DOM值
+							console.log(this.$refs.hello.textContent);
+						})
+					}
+				},
+				
+				computed: {
+		            info: function () {
+		                return 'computed'+'我的年龄'+this.age + '我的姓名' + this.name
+		            }
+		        }
+			});
+
+			// 1、获取data中的属性
+			//console.log(vm.name);
+			// 1、vm.$data 获取data中的属性
+			//console.log(vm.$data.name);
+			//3、vm.$el 获取vue实例关联的元素
+			//console.log(vm.$el);
+			//vm.$el.style.color = "red";
+			// 4、vm.$options 获取自定义属性
+			//console.log(vm.$options.name);
+			//vm.$options.show();
+			//5、vm.$refs 获取所有添加ref属性的元素  操作DOM节点
+			//vm.$refs.hello.style.color = "blue";
+			//vm.$refs.title.style.color = "blue";
+
+			//6、手动挂载VUE实例
+			vm.$mount('#my');
+			//new Vue({}).$mount('#my');
+			
+		}
+	</script>
+</head>
+<body>
+	<div id="my">
+		<h2>{{name}}</h2>
+		<h2>{{age}}</h2>
+		<h2 ref="hello">{{age}}</h2>
+		<h2 ref="title">{{name}}</h2>
+		<input type="text" ref="inputText" value="123"/>
+		<button @click="add">click</button>
+		<h2>{{abc()}}</h2>
+	</div>
+</body>
+</html>

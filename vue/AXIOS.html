@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>axios</title>
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script src="../lib/axios/dist/axios.js"></script>
+	<script>
+
+		window.onload=function(){
+			
+			new Vue({
+				el:'#my',// 2.0不允许挂载到html,body元素上
+				data:{
+					currentTime: Date.now(),
+					user:{
+						name:'sonia',
+						age:22
+					}
+				},
+				methods:{
+					send(){
+						axios({
+							method: 'get',
+							url: 'http://localhost:3000/info'
+						}).then(function(response){
+							console.log(response.data)
+						}).catch(resp => {
+							console.log('请求失败:' + resp);
+						});
+					},
+					sendGet(){
+						axios.get('http://localhost:3000/info', {
+							// params:{
+							// 	name:'aa',
+							// 	age:22
+							// }
+							params:this.user
+						})
+						.then(resp => {
+							console.log(resp);
+						}).catch(err => {
+							console.log(err);
+						})
+					},
+					sendPost(){
+						// 方式一   JSON方式传参
+						// axios.post('http://localhost:3000/info',this.user)
+						// 方式二  表单方式传参  Form Data
+						axios.post('http://localhost:3000/info', this.user, {
+							transformRequest:[    //转换请求数据的格式
+								function(data){
+									let str='';
+									for(let index in data){
+										console.log(index);
+										//name=sonia&age=22&
+										str += index+'='+data[index]+'&';
+									}
+									str = str.substring(0,str.length-1);  //截取最后一个&
+									//return "name=sonia&age=22";
+									return str;
+								}
+							]
+						})
+						.then(resp => {
+							console.log(resp);
+						})
+						.catch(err => {
+							console.log(resp);
+						})
+					}
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="my">
+		<button @click="send">发送ajax</button>
+
+		<button @click="sendGet">GET方式发送ajax</button>
+		<button @click="sendPost">post方式发送ajax</button>
+	</div>
+</body>
+</html>

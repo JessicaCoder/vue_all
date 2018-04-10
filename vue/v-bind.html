@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>v-bind</title>
+	<!-- <script src="../node_modules/vue/dist/vue.js"></script> -->
+	<script src="../lib/vue/dist/vue.js"></script>
+	<script>
+		window.onload=function(){
+			new Vue({
+				el:'#my',    // 2.0不允许挂载到html,body元素上
+				data:{
+					msg:'Hello World',
+					url:'https://www.baidu.com/img/baidu_jgylogo3.gif'	,
+					aa:'aa',   //className
+					bb:'bb',
+					flag: true,
+					cc:{color:'#000',fontSize:'25px',borderBottom:'1px solid #f60'},
+					dd:{background:'#f1f1f1'}
+				},
+				methods:{
+					
+				}
+			});
+		}
+	</script>
+	<style>
+		.aa{
+			color: #f00;
+			font-size: 20px;
+			background: blue;
+		}
+		.bb{
+			background: #ccc;
+		}
+	</style>
+</head>
+<body>
+	<div id="my">
+		<img v-bind:src="url"/>
+		<img :src="url" :title="url"/>
+		<!-- 引用单个 -->
+		<div :class="aa">
+			aa
+		</div>
+		<!-- 引用多个 -->
+		<div :class="[aa,bb]">
+			aabb
+		</div>
+		<!-- json方式 -->
+		<div :class="{aa:flag,bb:flag}">
+			json
+		</div>
+
+		<!-- style 行内 -->
+		<div :style="{color:'#000',fontSize:'25px',borderBottom:'1px solid #f60'}">style</div>
+		<!-- 引用单个 -->
+		<div :style="cc">
+			cc
+		</div>
+		<!-- 引用多个 -->
+		<div :style="[cc,dd]">
+			aabb
+		</div>
+
+		<!-- 三目运算  class -->
+		<div :class="flag ?'aa':'bb'">flag</div>
+		<!-- 三目运算  style -->
+		<div :style="flag ?cc:dd">flag</div>
+	</div>
+	
+</body>
+</html>

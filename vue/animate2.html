@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>过渡动画-Animate.css</title>
+	<link rel="stylesheet" href="../node_modules/animate.css/animate.css">
+	<style>
+	/*https://daneden.github.io/animate.css/*/
+		p{
+			font-size:30px;
+			text-align:center;
+		}
+	</style>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		
+		var vm = null;
+		window.onload=function(){
+			vm = new Vue({
+				el:'#my',
+				data:{
+					flag: false
+				},
+				methods:{
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="my">
+		<button @click="flag = !flag">click me</button>
+
+		<transition enter-active-class="animated flipOutY" leave-active-class="animated pulse">
+			<p v-show="flag">Welcome</p>
+		</transition>
+	</div>
+</body>
+</html>
